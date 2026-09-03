@@ -420,7 +420,6 @@ $('#leverTrack').addEventListener('pointerdown',(e)=>{
     leverDragging=false;
     const pct=parseFloat($('#leverFill').style.width)||0;
     if(pct>=85){
-      $('#leverKnob').classList.add('grabbing');
       boot();
     } else {
       $('#leverKnob').style.left='';
@@ -453,7 +452,6 @@ $('#leverTrack').addEventListener('keydown',(e)=>{
     $('#leverKnob').style.left='90%';
     $('#leverTrack').setAttribute('aria-valuenow','100');
     S.click();
-    $('#leverKnob').classList.add('grabbing');
     boot();
   }
 });
@@ -519,16 +517,17 @@ document.querySelectorAll('.dlab').forEach(d=>{
 
 /* ---------- buttons ---------- */
 $('#btnFeed').addEventListener('click',async(e)=>{
+  const btn=e.currentTarget;
   if(booting||!ready||printing){
-    if(!ready||booting) shakeEl(e.currentTarget);
+    if(!ready||booting) shakeEl(btn);
     return;
   }
   S.click();
-  e.currentTarget.classList.add('lit');
+  btn.classList.add('lit');
   $('#ledFeed').classList.add('on');
   await setDoc(currentDoc);
   await wait(100);
-  e.currentTarget.classList.remove('lit');
+  btn.classList.remove('lit');
   $('#ledFeed').classList.remove('on');
 });
 
@@ -578,7 +577,7 @@ $('#btnSnd').addEventListener('click',()=>{
 /* ---------- keyboard shortcuts ---------- */
 document.addEventListener('keydown',(e)=>{
   if(!ready||booting||printing) return;
-  if(e.target.closest('button')) return;
+  if((e.key===' '||e.key==='Enter')&&e.target.closest('button')) return;
   const key=e.key.toLowerCase();
   if(key==='f'){ e.preventDefault(); $('#btnFeed').click(); }
   if(key==='t'){ e.preventDefault(); $('#btnTest').click(); }
